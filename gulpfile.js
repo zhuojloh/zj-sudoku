@@ -20,6 +20,7 @@ gulp.task('browserify', function(){
         }))
         .pipe(source('bundle.js'))
         .pipe(buffer())
+        .pipe(uglify())
         .pipe(gulp.dest('./public/javascripts/'));
 });
 
