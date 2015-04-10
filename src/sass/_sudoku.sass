@@ -1,12 +1,33 @@
-table.sudokuBoard
+div.sudoku-container
+  text-align: center
+
+table.sudoku-board
   border: 2px solid #1a1a1a
   text-align: center
   box-sizing: border-box
   border-collapse: collapse
   margin: 0 auto
 
+  &.solved
+    pointer-events: none
+
   tr
-    td.sudokuCell
+    &:first-child,
+    &:nth-child(4),
+    &:nth-child(7)
+      td.sudoku-cell
+        border-top-width: 0
+
+    &:nth-child(3),
+    &:nth-child(6)
+      td.sudoku-cell
+        border-bottom-width: 2px
+
+    &:last-child
+      td.sudoku-cell
+        border-bottom-width: 0
+
+    td.sudoku-cell
       border: 1px solid #959595
       text-align: center
       vertical-align: middle
@@ -31,30 +52,24 @@ table.sudokuBoard
       input[type='number']::-webkit-inner-spin-button
         -webkit-appearance: none
 
+      &:first-child
+        border-left-width: 0
 
-    td.sudokuCell:first-child
-      border-left-width: 0
+      &:nth-child(3),
+      &:nth-child(6)
+        border-right-width: 2px
 
-    td.sudokuCell:nth-child(3),
-    td.sudokuCell:nth-child(6)
-      border-right-width: 2px
+      &.given,
+      &.given input[type='number']
+        background-color: #ddd
+        pointer-events: none
 
-    td.sudokuCell.given,
-    td.sudokuCell.given input[type='number']
-      background-color: #ddd
-      pointer-events: none
+      &.correct input
+        color: #2ecc71
 
-  tr:first-child,
-  tr:nth-child(4),
-  tr:nth-child(7)
-    td.sudokuCell
-      border-top-width: 0
+      &.incorrect input
+        color: #c0392b
 
-  tr:nth-child(3),
-  tr:nth-child(6)
-    td.sudokuCell
-      border-bottom-width: 2px
 
-  tr:last-child
-    td.sudokuCell
-      border-bottom-width: 0
+
+
