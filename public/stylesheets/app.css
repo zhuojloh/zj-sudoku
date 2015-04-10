@@ -69,11 +69,15 @@ table.sudoku-board {
     z-index: 11;
     width: 360px; }
     .modal .modal-dialog .modal-body {
-      padding: 20px; }
+      padding: 20px;
+      font-size: 18px; }
     .modal .modal-dialog .modal-header, .modal .modal-dialog .modal-footer {
       padding: 10px 20px; }
     .modal .modal-dialog .modal-header {
-      border-bottom: #eee solid 1px; }
+      border-bottom: #eee solid 1px;
+      background: #eee;
+      border-top-left-radius: 5px;
+      border-top-right-radius: 5px; }
       .modal .modal-dialog .modal-header h2 {
         font-size: 20px; }
     .modal .modal-dialog .modal-footer {
@@ -98,6 +102,7 @@ table.sudoku-board {
     opacity: 0;
     -webkit-transition: all 0.1s;
     -moz-transition: all 0.1s;
+    -ms-transition: all 0.1s;
     transition: all 0.1s; }
   .modal .modal-transition-enter.modal-transition-enter-active {
     -webkit-transform: scale(1);
@@ -109,6 +114,10 @@ table.sudoku-board {
     opacity: 1; }
   .modal .modal-transition-leave.modal-transition-leave-active {
     opacity: 0; }
+
+html, body, ul, ol {
+  margin: 0;
+  padding: 0; }
 
 body {
   font-size: 24px;
@@ -142,3 +151,13 @@ body {
 
 .btn:last-child {
   margin-right: 0px; }
+
+.header {
+  height: 50px;
+  position: relative;
+  background-color: #2980b9;
+  text-align: center;
+  line-height: 50px;
+  color: #fff;
+  margin-bottom: 20px;
+  box-shadow: 0px 2px 2px #ccc; }

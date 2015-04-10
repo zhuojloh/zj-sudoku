@@ -16,7 +16,8 @@ var SudokuBoard = React.createClass({
         };
     },
 
-    solveGame: function(){
+    handleSolveGame: function(){
+        //go through each cell and enter answer for each cell
         this.setState({cells:this.state.original.slice()}, function() {
             for (var i = 0; i < this.state.solved.length; i++) {
                 var cell = jQuery("#cell" + i);
@@ -27,9 +28,10 @@ var SudokuBoard = React.createClass({
         });
     },
 
-    resetGame: function(){
+    handleResetGame: function(){
         var board = jQuery(React.findDOMNode(this.refs.board));
         board.removeClass("solved");
+        //reset cells to original
         this.setState({cells:this.state.original.slice()}, function(){
             this.saveStateToStorage();
         });
@@ -39,6 +41,7 @@ var SudokuBoard = React.createClass({
     {
         var cells = this.state.cells;
         cells[idx] = parseInt(item.value);
+        //show incorrect and correct hint
         if(item.value==this.state.solved[idx])
         {
             jQuery("#cell"+idx).removeClass("incorrect").addClass("correct");
@@ -48,10 +51,12 @@ var SudokuBoard = React.createClass({
             jQuery("#cell"+idx).removeClass("correct").addClass("incorrect");
         }
 
+        //save current state
         this.setState({cells: cells}, function(){
             this.saveCellToStorage();
         });
 
+        //check if cells array is equal to solved, if we have a match. Game completed
         if(_.isEqual(this.state.cells,this.state.solved))
         {
             var board = jQuery(React.findDOMNode(this.refs.board));
@@ -59,7 +64,7 @@ var SudokuBoard = React.createClass({
             React.render(
                 <Modal title="Hooray" closeClick={this.closeModal}>
                     <div>
-                        You did it!!
+                        You did it!! Care for a new game?
                     </div>
                     <div>
                         <div className="btn" onClick={this.handleNewGame}>New Game</div>
@@ -71,12 +76,13 @@ var SudokuBoard = React.createClass({
 
     closeModal: function()
     {
+        //close modal dialog by removing Modal
         React.unmountComponentAtNode(document.getElementById("modalArea"));
     },
 
     handleNewGame: function() {
+        //create new game and reset state
         this._sudoku.newGame();
-
         var savedState = {};
         var savedCells = this._sudoku.matrix.slice();
         savedState.solved = this._sudoku.save.slice();
@@ -109,11 +115,13 @@ var SudokuBoard = React.createClass({
 
     saveCellToStorage: function()
     {
+        //save cells to local storage
         localStorage.setItem("sudokuCells", JSON.stringify(this.state.cells));
     },
 
     saveStateToStorage: function()
     {
+        //save solved and original to local storage
         var savedState = {};
         savedState.solved = this.state.solved;
         savedState.original = this.state.original;
@@ -124,6 +132,7 @@ var SudokuBoard = React.createClass({
    render: function(){
        var rows = [];
        if(this.state.cells.length > 0) {
+           //draw rows and cells
            for (var i = 0; i < 9; i++) {
                var sudokuCells = [];
                for (var j = 0; j < 9; j++) {
@@ -155,8 +164,8 @@ var SudokuBoard = React.createClass({
                {rows}
            </table>
             <div className="btn-group">
-                <div className="btn" onClick={this.resetGame}>Reset Game</div>
-                <div className="btn" onClick={this.solveGame}>Solve Game</div>
+                <div className="btn" onClick={this.handleResetGame}>Reset Game</div>
+                <div className="btn" onClick={this.handleSolveGame}>Solve Game</div>
                 <div className="btn" onClick={this.handleNewGame}>New Game</div>
             </div>
            </div>

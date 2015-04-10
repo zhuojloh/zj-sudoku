@@ -33700,7 +33700,6 @@ module.exports = function() {
 }
 
 },{}],179:[function(require,module,exports){
-var $ = require("jquery");
 var React = require('react/addons');
 var ReactCSSTransitionGroup = React.addons.CSSTransitionGroup;
 
@@ -33711,7 +33710,7 @@ var Modal = React.createClass({displayName: "Modal",
     getInitialState: function () {
         return {mounted: false}
     },
-    // This was the key fix --- stop events from bubbling
+
     handleClick: function (e) {
         e.stopPropagation();
         this.props.closeClick();
@@ -33751,7 +33750,7 @@ var Modal = React.createClass({displayName: "Modal",
 
 module.exports = Modal;
 
-},{"jquery":3,"react/addons":4}],180:[function(require,module,exports){
+},{"react/addons":4}],180:[function(require,module,exports){
 var React = require('react/addons');
 var Sudoku = require("../../lib/sudoku.js");
 var SudokuCell = require("./SudokuCell.jsx");
@@ -33770,7 +33769,8 @@ var SudokuBoard = React.createClass({displayName: "SudokuBoard",
         };
     },
 
-    solveGame: function(){
+    handleSolveGame: function(){
+        //go through each cell and enter answer for each cell
         this.setState({cells:this.state.original.slice()}, function() {
             for (var i = 0; i < this.state.solved.length; i++) {
                 var cell = jQuery("#cell" + i);
@@ -33781,9 +33781,10 @@ var SudokuBoard = React.createClass({displayName: "SudokuBoard",
         });
     },
 
-    resetGame: function(){
+    handleResetGame: function(){
         var board = jQuery(React.findDOMNode(this.refs.board));
         board.removeClass("solved");
+        //reset cells to original
         this.setState({cells:this.state.original.slice()}, function(){
             this.saveStateToStorage();
         });
@@ -33793,6 +33794,7 @@ var SudokuBoard = React.createClass({displayName: "SudokuBoard",
     {
         var cells = this.state.cells;
         cells[idx] = parseInt(item.value);
+        //show incorrect and correct hint
         if(item.value==this.state.solved[idx])
         {
             jQuery("#cell"+idx).removeClass("incorrect").addClass("correct");
@@ -33802,10 +33804,12 @@ var SudokuBoard = React.createClass({displayName: "SudokuBoard",
             jQuery("#cell"+idx).removeClass("correct").addClass("incorrect");
         }
 
+        //save current state
         this.setState({cells: cells}, function(){
             this.saveCellToStorage();
         });
 
+        //check if cells array is equal to solved, if we have a match. Game completed
         if(_.isEqual(this.state.cells,this.state.solved))
         {
             var board = jQuery(React.findDOMNode(this.refs.board));
@@ -33813,7 +33817,7 @@ var SudokuBoard = React.createClass({displayName: "SudokuBoard",
             React.render(
                 React.createElement(Modal, {title: "Hooray", closeClick: this.closeModal}, 
                     React.createElement("div", null, 
-                        "You did it!!"
+                        "You did it!! Care for a new game?"
                     ), 
                     React.createElement("div", null, 
                         React.createElement("div", {className: "btn", onClick: this.handleNewGame}, "New Game")
@@ -33825,12 +33829,13 @@ var SudokuBoard = React.createClass({displayName: "SudokuBoard",
 
     closeModal: function()
     {
+        //close modal dialog by removing Modal
         React.unmountComponentAtNode(document.getElementById("modalArea"));
     },
 
     handleNewGame: function() {
+        //create new game and reset state
         this._sudoku.newGame();
-
         var savedState = {};
         var savedCells = this._sudoku.matrix.slice();
         savedState.solved = this._sudoku.save.slice();
@@ -33863,11 +33868,13 @@ var SudokuBoard = React.createClass({displayName: "SudokuBoard",
 
     saveCellToStorage: function()
     {
+        //save cells to local storage
         localStorage.setItem("sudokuCells", JSON.stringify(this.state.cells));
     },
 
     saveStateToStorage: function()
     {
+        //save solved and original to local storage
         var savedState = {};
         savedState.solved = this.state.solved;
         savedState.original = this.state.original;
@@ -33878,6 +33885,7 @@ var SudokuBoard = React.createClass({displayName: "SudokuBoard",
    render: function(){
        var rows = [];
        if(this.state.cells.length > 0) {
+           //draw rows and cells
            for (var i = 0; i < 9; i++) {
                var sudokuCells = [];
                for (var j = 0; j < 9; j++) {
@@ -33909,8 +33917,8 @@ var SudokuBoard = React.createClass({displayName: "SudokuBoard",
                rows
            ), 
             React.createElement("div", {className: "btn-group"}, 
-                React.createElement("div", {className: "btn", onClick: this.resetGame}, "Reset Game"), 
-                React.createElement("div", {className: "btn", onClick: this.solveGame}, "Solve Game"), 
+                React.createElement("div", {className: "btn", onClick: this.handleResetGame}, "Reset Game"), 
+                React.createElement("div", {className: "btn", onClick: this.handleSolveGame}, "Solve Game"), 
                 React.createElement("div", {className: "btn", onClick: this.handleNewGame}, "New Game")
             )
            )

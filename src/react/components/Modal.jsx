@@ -1,4 +1,3 @@
-var $ = require("jquery");
 var React = require('react/addons');
 var ReactCSSTransitionGroup = React.addons.CSSTransitionGroup;
 
@@ -9,7 +8,7 @@ var Modal = React.createClass({
     getInitialState: function () {
         return {mounted: false}
     },
-    // This was the key fix --- stop events from bubbling
+
     handleClick: function (e) {
         e.stopPropagation();
         this.props.closeClick();
