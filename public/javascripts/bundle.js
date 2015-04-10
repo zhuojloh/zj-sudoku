@@ -33941,7 +33941,7 @@ var SudokuCell = React.createClass({displayName: "SudokuCell",
 
     handleKeyDown: function (e) {
         //cursor keys(delete, tabs, arrows) let it through
-        if (e.which >= 8 && e.which <= 48) {
+        if (e.which >= 8 && e.which < 48) {
             return;
         }
         //1-9 key is 49 to 57. Stop any other key from showing
