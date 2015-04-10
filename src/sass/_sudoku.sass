@@ -3,6 +3,9 @@
 div.sudoku-container
   text-align: center
 
+//
+// Sudoku Board
+// ----------------------
 table.sudoku-board
   border: 2px solid #1a1a1a
   text-align: center
@@ -13,6 +16,9 @@ table.sudoku-board
   &.solved
     pointer-events: none
 
+  //
+  // Sudoku Row
+  // ----------------------
   tr
     &:first-child,
     &:nth-child(4),
@@ -29,6 +35,9 @@ table.sudoku-board
       td.sudoku-cell
         border-bottom-width: 0
 
+    //
+    // Sudoku Cell
+    // ----------------------
     td.sudoku-cell
       border: 1px solid #959595
       text-align: center

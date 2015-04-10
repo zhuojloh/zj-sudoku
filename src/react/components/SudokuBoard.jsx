@@ -8,7 +8,7 @@ var _ = require("underscore");
 var SudokuBoard = React.createClass({
     _sudoku: new Sudoku(),
 
-    getInitialState: function() {
+    getInitialState: function () {
         return {
             cells: [],
             solved: [],
@@ -16,49 +16,45 @@ var SudokuBoard = React.createClass({
         };
     },
 
-    handleSolveGame: function(){
+    handleSolveGame: function () {
         //go through each cell and enter answer for each cell
-        this.setState({cells:this.state.original.slice()}, function() {
+        this.setState({cells: this.state.original.slice()}, function () {
             for (var i = 0; i < this.state.solved.length; i++) {
                 var cell = jQuery("#cell" + i);
                 if (!cell.hasClass("given")) {
-                    React.addons.TestUtils.Simulate.keyDown(cell.find("input")[0], {which: this.state.solved[i] + 48});
+                    cell.find("input").trigger({"type": "keydown", which: this.state.solved[i] + 48});
                 }
             }
         });
     },
 
-    handleResetGame: function(){
+    handleResetGame: function () {
         var board = jQuery(React.findDOMNode(this.refs.board));
         board.removeClass("solved");
         //reset cells to original
-        this.setState({cells:this.state.original.slice()}, function(){
+        this.setState({cells: this.state.original.slice()}, function () {
             this.saveStateToStorage();
         });
     },
 
-    handleCellTextChange: function(idx, item)
-    {
+    handleCellTextChange: function (idx, item) {
         var cells = this.state.cells;
         cells[idx] = parseInt(item.value);
         //show incorrect and correct hint
-        if(item.value==this.state.solved[idx])
-        {
-            jQuery("#cell"+idx).removeClass("incorrect").addClass("correct");
+        if (item.value == this.state.solved[idx]) {
+            jQuery("#cell" + idx).removeClass("incorrect").addClass("correct");
         }
-        else
-        {
-            jQuery("#cell"+idx).removeClass("correct").addClass("incorrect");
+        else {
+            jQuery("#cell" + idx).removeClass("correct").addClass("incorrect");
         }
 
         //save current state
-        this.setState({cells: cells}, function(){
+        this.setState({cells: cells}, function () {
             this.saveCellToStorage();
         });
 
         //check if cells array is equal to solved, if we have a match. Game completed
-        if(_.isEqual(this.state.cells,this.state.solved))
-        {
+        if (_.isEqual(this.state.cells, this.state.solved)) {
             var board = jQuery(React.findDOMNode(this.refs.board));
             board.addClass("solved");
             React.render(
@@ -70,24 +66,23 @@ var SudokuBoard = React.createClass({
                         <div className="btn" onClick={this.handleNewGame}>New Game</div>
                     </div>
                 </Modal>
-            , document.getElementById("modalArea"));
+                , document.getElementById("modalArea"));
         }
     },
 
-    closeModal: function()
-    {
+    closeModal: function () {
         //close modal dialog by removing Modal
         React.unmountComponentAtNode(document.getElementById("modalArea"));
     },
 
-    handleNewGame: function() {
+    handleNewGame: function () {
         //create new game and reset state
         this._sudoku.newGame();
         var savedState = {};
         var savedCells = this._sudoku.matrix.slice();
         savedState.solved = this._sudoku.save.slice();
         savedState.original = this._sudoku.matrix.slice();
-        this.setState({cells:savedCells, solved:savedState.solved, original:savedState.original}, function(){
+        this.setState({cells: savedCells, solved: savedState.solved, original: savedState.original}, function () {
             this.saveStateToStorage();
         });
         var board = jQuery(React.findDOMNode(this.refs.board));
@@ -95,32 +90,28 @@ var SudokuBoard = React.createClass({
         this.closeModal();
     },
 
-    componentDidMount : function()
-    {
+    componentDidMount: function () {
         //check local storage for state
         var savedState = localStorage.getItem('sudokuState');
         var savedCells = localStorage.getItem('sudokuCells');
-        if(!savedState || !savedCells) {
+        if (!savedState || !savedCells) {
             this.handleNewGame();
         }
-        else{
+        else {
             savedState = JSON.parse(savedState);
             savedCells = JSON.parse(savedCells);
-            this.setState({cells:savedCells, solved:savedState.solved, original:savedState.original}, function(){
+            this.setState({cells: savedCells, solved: savedState.solved, original: savedState.original}, function () {
                 this.saveStateToStorage();
             });
-
         }
     },
 
-    saveCellToStorage: function()
-    {
+    saveCellToStorage: function () {
         //save cells to local storage
         localStorage.setItem("sudokuCells", JSON.stringify(this.state.cells));
     },
 
-    saveStateToStorage: function()
-    {
+    saveStateToStorage: function () {
         //save solved and original to local storage
         var savedState = {};
         savedState.solved = this.state.solved;
@@ -129,48 +120,47 @@ var SudokuBoard = React.createClass({
         this.saveCellToStorage();
     },
 
-   render: function(){
-       var rows = [];
-       var sudokuCells = [];
-       if(this.state.cells.length > 0) {
-           //draw rows and cells
-           for (var i = 0; i < this.state.cells.length; i++) {
-               var cellIdx = i;
-               var given = this.state.original[cellIdx] > 0;
-               var props = {
-                   key: "cell" + cellIdx,
-                   idx: cellIdx,
-                   value: this.state.cells[cellIdx] > 0 ? this.state.cells[cellIdx]: null,
-                   given: given,
-                   cellTextChange: this.handleCellTextChange,
-                   answer: this.state.solved[cellIdx]
-               }
-               sudokuCells.push(<SudokuCell {...props} />);
-               if((i+1) % 9 == 0) {
-                   var rowKey = "row" + parseInt(i / 9);
-                   rows.push(
-                       <tr key={rowKey}>
-                           {sudokuCells}
-                       </tr>
-                   );
-                   sudokuCells = [];
-               }
-           }
-       }
-       
-       return(
-           <div className="sudoku-container">
-           <table className='sudoku-board' ref="board">
-               {rows}
-           </table>
-            <div className="btn-group">
-                <div className="btn" onClick={this.handleResetGame}>Reset Game</div>
-                <div className="btn" onClick={this.handleSolveGame}>Solve Game</div>
-                <div className="btn" onClick={this.handleNewGame}>New Game</div>
+    render: function () {
+        var rows = [];
+        var sudokuCells = [];
+        if (this.state.cells.length > 0) {
+            //draw rows and cells
+            _.each(this.state.cells, function (elem, cellIdx) {
+                var given = this.state.original[cellIdx] > 0;
+                var props = {
+                    key: "cell" + cellIdx,
+                    idx: cellIdx,
+                    value: elem > 0 ? elem : null,
+                    given: given,
+                    cellTextChange: this.handleCellTextChange,
+                    answer: this.state.solved[cellIdx]
+                }
+                sudokuCells.push(<SudokuCell {...props} />);
+                if ((cellIdx + 1) % 9 == 0) {
+                    var rowKey = "row" + parseInt(cellIdx / 9);
+                    rows.push(
+                        <tr key={rowKey}>
+                            {sudokuCells}
+                        </tr>
+                    );
+                    sudokuCells = [];
+                }
+            }.bind(this));
+        }
+
+        return (
+            <div className="sudoku-container">
+                <table className='sudoku-board' ref="board">
+                    {rows}
+                </table>
+                <div className="btn-group">
+                    <div className="btn" onClick={this.handleResetGame}>Reset Game</div>
+                    <div className="btn" onClick={this.handleSolveGame}>Solve Game</div>
+                    <div className="btn" onClick={this.handleNewGame}>New Game</div>
+                </div>
             </div>
-           </div>
-       );
-   }
+        );
+    }
 });
 
 module.exports = SudokuBoard;

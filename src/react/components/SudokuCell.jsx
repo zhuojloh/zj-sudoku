@@ -1,4 +1,5 @@
 var React = require('react');
+var jQuery =require('jquery');
 
 var SudokuCell = React.createClass({
     //notify sudokuBoard cellTextChange
@@ -25,7 +26,12 @@ var SudokuCell = React.createClass({
         }
     },
 
+    componentDidMount: function(){
+        jQuery(React.findDOMNode(this.refs.cellText)).on('keydown', this.handleKeyDown)
+    },
+
     render: function () {
+        //generate cell className
         var cellClassName = "sudoku-cell" + ((this.props.given) ? " given" : "");
         if (!this.props.given && this.props.value) {
             cellClassName += this.props.answer == this.props.value ? " correct" : " incorrect";
@@ -34,7 +40,7 @@ var SudokuCell = React.createClass({
         return (
             <td className={cellClassName} id={cellId}>
                 <input ref="cellText" type="number" size="1" min="1" max="9" onChange={this.handleTextChange}
-                       onKeyDown={this.handleKeyDown} value={this.props.value}/>
+                       value={this.props.value}/>
             </td>
         );
     }

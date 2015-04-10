@@ -19,6 +19,7 @@ var Modal = React.createClass({
     render: function () {
         var modal;
 
+        //Do this to get React transition animation
         if(this.state.mounted) {
             modal = (
                 <div className="modal-dialog" key="mounted">

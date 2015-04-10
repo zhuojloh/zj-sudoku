@@ -3,3 +3,16 @@ $gray-light: #aaa
 $gray-lighter: #eee
 $space: 40px
 $break-small: 480px
+
+// Mixin for transition/transform
+@mixin transform($transform)
+  -webkit-transform: $transform
+  -moz-transform: $transform
+  -ms-transform: $transform // IE9+
+  transform: $transform
+
+@mixin transition($transition)
+  -webkit-transition: $transition
+  -moz-transition: $transition
+  -ms-transition: $transition
+  transition: $transition

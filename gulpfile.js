@@ -12,13 +12,16 @@ var onError = function (err) {
     console.log(err);
 };
 
+gulp.task("build",["browserify","sass"]);
+
 gulp.task('browserify', function(){
     browserify("./src/react/app.jsx")
+        .on('error', function(err){
+            console.log(err.message);
+            this.end();
+        })
         .transform(reactify)
         .bundle()
-        .pipe(plumber({
-            errorHandler: onError
-        }))
         .pipe(source('bundle.js'))
         .pipe(buffer())
         .pipe(uglify())
