@@ -131,30 +131,31 @@ var SudokuBoard = React.createClass({
 
    render: function(){
        var rows = [];
+       var sudokuCells = [];
        if(this.state.cells.length > 0) {
            //draw rows and cells
-           for (var i = 0; i < 9; i++) {
-               var sudokuCells = [];
-               for (var j = 0; j < 9; j++) {
-                   var cellIdx = i * 9 + j;
-                   var given = this.state.original[cellIdx] > 0;
-                   var props = {
-                       key: "cell" + cellIdx,
-                       idx: cellIdx,
-                       value: this.state.cells[cellIdx] > 0 ? this.state.cells[cellIdx]: null,
-                       given: given,
-                       cellTextChange: this.handleCellTextChange,
-                       answer: this.state.solved[cellIdx]
-                   }
-                   sudokuCells.push(<SudokuCell {...props} />);
+           for (var i = 0; i < this.state.cells.length; i++) {
+               var cellIdx = i;
+               var given = this.state.original[cellIdx] > 0;
+               var props = {
+                   key: "cell" + cellIdx,
+                   idx: cellIdx,
+                   value: this.state.cells[cellIdx] > 0 ? this.state.cells[cellIdx]: null,
+                   given: given,
+                   cellTextChange: this.handleCellTextChange,
+                   answer: this.state.solved[cellIdx]
                }
-
-               var rowKey = "row" + i;
-               rows.push(
-                   <tr key={rowKey}>
-                       {sudokuCells}
-                   </tr>
-               );
+               sudokuCells.push(<SudokuCell {...props} />);
+               console.log((i+1)%9);
+               if((i+1) % 9 == 0) {
+                   var rowKey = "row" + parseInt(i / 9);
+                   rows.push(
+                       <tr key={rowKey}>
+                           {sudokuCells}
+                       </tr>
+                   );
+                   sudokuCells = [];
+               }
            }
        }
 
