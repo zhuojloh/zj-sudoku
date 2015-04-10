@@ -1,7 +1,4 @@
-$gray: #333
-$gray-light: #aaa
-$gray-lighter: #eee
-$space: 40px
+@import settings
 
 // Mixin for transition/transform
 @mixin transform($transform)
@@ -15,7 +12,6 @@ $space: 40px
   -moz-transition: $transition
   -ms-transition: $transition
   transition: $transition
-
 
 //
 // Modal
@@ -39,16 +35,24 @@ $space: 40px
     background: #fefefe
     border: $gray solid 1px
     border-radius: 5px
-    margin-left: -200px
+    margin-left: -180px
     position: fixed
     left: 50%
     top: 20%
     z-index: 11
     width: 360px
+    @media screen and (max-width: $break-small)
+      width: 260px
+      margin-left: -130px
+
 
     .modal-body
       padding: $space/2
       font-size: 18px
+
+      @media screen and (max-width: $break-small)
+        font-size: 14px
+
 
     .modal-header,
     .modal-footer
@@ -64,6 +68,9 @@ $space: 40px
       h2
         font-size: 20px
 
+        @media screen and (max-width: $break-small)
+          font-size: 16px
+
     .modal-footer
       border-top: $gray-lighter solid 1px
       text-align: right
@@ -76,6 +83,9 @@ $space: 40px
       position: absolute
       right: 5px
       top: 0
+
+      @media screen and (max-width: $break-small)
+        font-size: 25px
 
       &:before
         content: '×'

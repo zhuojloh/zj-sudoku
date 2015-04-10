@@ -1,3 +1,4 @@
+@import settings
 @import sudoku
 @import modal
 
@@ -11,6 +12,9 @@ ol
 body
   font-size: 24px
   font-family: 'Lato', sans-serif
+
+  @media screen and (max-width: $break-small)
+    font-size: 18px
 
 .btn
   position: relative
@@ -32,6 +36,12 @@ body
   box-shadow: inset 0 -2px #2475ab
   margin-right: 5px
   margin-top: 15px
+
+  @media screen and (max-width: $break-small)
+      font-size: 13px
+      width: 80px
+      height: 20px
+      line-height: 20px
 
   &:active
     top: 1px

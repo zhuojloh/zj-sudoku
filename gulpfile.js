@@ -6,6 +6,7 @@ var plumber = require('gulp-plumber');
 var source = require("vinyl-source-stream");
 var buffer = require('vinyl-buffer');
 var reactify = require('reactify');
+var minifyCss = require('gulp-minify-css');
 
 var onError = function (err) {
     console.log(err);
@@ -20,7 +21,7 @@ gulp.task('browserify', function(){
         }))
         .pipe(source('bundle.js'))
         .pipe(buffer())
-       // .pipe(uglify())
+        .pipe(uglify())
         .pipe(gulp.dest('./public/javascripts/'));
 });
 
@@ -30,6 +31,7 @@ gulp.task('sass', function () {
             errorHandler: onError
         }))
         .pipe(sass({ indentedSyntax: true }))
+        .pipe(minifyCss())
         .pipe(gulp.dest('./public/stylesheets/'));
 });
 

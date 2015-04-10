@@ -146,7 +146,6 @@ var SudokuBoard = React.createClass({
                    answer: this.state.solved[cellIdx]
                }
                sudokuCells.push(<SudokuCell {...props} />);
-               console.log((i+1)%9);
                if((i+1) % 9 == 0) {
                    var rowKey = "row" + parseInt(i / 9);
                    rows.push(
@@ -158,7 +157,7 @@ var SudokuBoard = React.createClass({
                }
            }
        }
-
+       
        return(
            <div className="sudoku-container">
            <table className='sudoku-board' ref="board">
