@@ -1,5 +1,5 @@
 var React = require('react');
-var jQuery =require('jquery');
+var jQuery = require('jquery');
 
 var SudokuCell = React.createClass({
     //notify sudokuBoard cellTextChange
@@ -26,8 +26,20 @@ var SudokuCell = React.createClass({
         }
     },
 
-    componentDidMount: function(){
-        jQuery(React.findDOMNode(this.refs.cellText)).on('keydown', this.handleKeyDown)
+    componentDidMount: function () {
+        var cellText = jQuery(React.findDOMNode(this.refs.cellText));
+        cellText.on('keydown', this.handleKeyDown);
+    },
+
+    componentDidUpdate: function()
+    {
+        var cellText = jQuery(React.findDOMNode(this.refs.cellText));
+        if (this.props.given) {
+            cellText.prop("disabled", true);
+        }
+        else {
+            cellText.prop("disabled", false);
+        }
     },
 
     render: function () {
